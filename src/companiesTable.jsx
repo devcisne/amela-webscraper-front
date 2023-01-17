@@ -1,61 +1,34 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { CgSpinner } from "react-icons/cg";
-
-// const people = [
-//   {
-//     name: "Lindsay Walton",
-//     title: "Front-end Developer",
-//     email: "lindsay.walton@example.com",
-//     role: "Member",
-//   },
-//   // More people...
-// ];
+import HTMLReactParser from "html-react-parser";
 
 const CompaniesTable = () => {
   const [isLoading, setIsLoading] = useState(true);
-  // const [companies, setCompanies] = useState([]);
-  const companies = [
-    {
-      _id: "63c17c3e7d519afa486c9152",
-      links: [
-        "https://forbes.cl/negocios/2023-01-12/poliglota-startup-inversiones-broota-crowdfunding/",
-        "https://startupslatam.com/mas-de-us-500-mil-ha-recaudado-la-edtech-poliglota-en-ronda-bridge-lanzada-en-broota/",
-      ],
-      company: "Poliglota",
-      amount: "US$500K",
-    },
-    {
-      _id: "63c17ca57741526bbb367525",
-      links: [],
-      company: "Bioelements",
-      amount: "US$30M",
-    },
-  ];
+  const [companies, setCompanies] = useState([]);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
+  useEffect(() => {
+    setIsLoading(true);
 
-  //   const fetchData = async () => {
-  //     return await axios({
-  //       method: "GET",
-  //       url: `${process.env.REACT_APP_API_ENDPOINT}/api/companies`,
-  //     });
-  //   };
-  //   fetchData()
-  //     .then((response) => {
-  //       // console.log("response", response.headers)
-  //       if (response.status === 200) {
-  //         // console.log("Request was successfull.");
-  //         console.log(response.data);
-  //         setCompanies(response.data);
-  //         setIsLoading(false);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(`Request failed. error:`, error);
-  //     });
-  // }, []);
+    const fetchData = async () => {
+      return await axios({
+        method: "GET",
+        url: `${process.env.REACT_APP_API_ENDPOINT}/api/companies`,
+      });
+    };
+    fetchData()
+      .then((response) => {
+        // console.log("response", response.headers)
+        if (response.status === 200) {
+          // console.log("Request was successfull.");
+          setCompanies(response.data);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.log(`Request failed. error:`, error);
+      });
+  }, []);
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -93,13 +66,25 @@ const CompaniesTable = () => {
                     >
                       <p className="text-center"> Information links</p>
                     </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      <p className="text-center"> Content</p>
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      <p className="text-center"> Updated on</p>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {companies.map((company) => (
+                  {companies.map((company, i) => (
                     <tr
                       key={company._id}
-                      // className={personIdx % 2 === 0 ? undefined : "bg-gray-50"}
+                      className={i % 2 === 0 ? undefined : "bg-gray-50"}
                     >
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         {company.company}
@@ -114,6 +99,12 @@ const CompaniesTable = () => {
                             <br />
                           </>
                         ))}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {HTMLReactParser(company.content)}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {company.createdAt}
                       </td>
                     </tr>
                   ))}
