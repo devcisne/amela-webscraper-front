@@ -95,15 +95,19 @@ const CompaniesTable = () => {
                             {company.amount}
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {company.links.map((link) => (
-                              <>
-                                <a href={link}>{link}</a>
-                                <br />
-                              </>
-                            ))}
+                            {company.links.length > 0
+                              ? company.links.map((link) => (
+                                  <>
+                                    <a href={link}>{link}</a>
+                                    <br />
+                                  </>
+                                ))
+                              : "not available at time of update, check www.descubre.vc or wait for next update"}
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {HTMLReactParser(company.content)}
+                            {company.content
+                              ? HTMLReactParser(company.content)
+                              : "not available at time of update, check www.descubre.vc or wait for next update"}
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                             {company.createdAt}
