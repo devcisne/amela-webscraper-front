@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { CgSpinner } from "react-icons/cg";
 import HTMLReactParser from "html-react-parser";
+import Filter from "./Filter";
 
 const CompaniesTable = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -22,6 +24,7 @@ const CompaniesTable = () => {
         if (response.status === 200) {
           // console.log("Request was successfull.");
           setCompanies(response.data);
+          setFilteredList(response.data);
           setIsLoading(false);
         }
       })
@@ -41,6 +44,8 @@ const CompaniesTable = () => {
           </p>
         </div>
       </div>
+
+      <Filter companies={companies} setFilteredList={setFilteredList} />
       {!isLoading ? (
         <>
           <div className="mt-8 flex flex-col">
@@ -83,7 +88,7 @@ const CompaniesTable = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white">
-                      {companies.map((company, i) => (
+                      {filteredList.map((company, i) => (
                         <tr
                           key={company._id}
                           className={i % 2 === 0 ? undefined : "bg-gray-50"}
@@ -96,7 +101,7 @@ const CompaniesTable = () => {
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                             {company.links.length > 0
-                              ? company.links.map((link) => (
+                              ? company.links.map((link, i) => (
                                   <>
                                     <a href={link}>{link}</a>
                                     <br />
@@ -110,7 +115,7 @@ const CompaniesTable = () => {
                               : "not available at time of update, check www.descubre.vc or wait for next update"}
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {company.createdAt}
+                            {`${new Date(company.createdAt).toUTCString()}`}
                           </td>
                         </tr>
                       ))}
