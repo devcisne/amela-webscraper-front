@@ -8,7 +8,7 @@ const CopyButton = ({ company }) => {
   const handleClipboadClick = (company) => {
     console.log(company.company);
     copy(
-      `${company.company} <a href=${company.links[0]}>levantó</a>${company.amount}`,
+      `${company.company} <a href=${company.links[0]}>levantó</a> ${company.amount}`,
       { format: "text/html" }
     );
     setIsCopied(true);
