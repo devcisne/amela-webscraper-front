@@ -3,6 +3,7 @@ import axios from "axios";
 import { CgSpinner } from "react-icons/cg";
 import HTMLReactParser from "html-react-parser";
 import Filter from "./Filter";
+import CopyButton from "./copyButton";
 
 const CompaniesTable = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -85,6 +86,12 @@ const CompaniesTable = () => {
                         >
                           <p className="text-center"> Updated on</p>
                         </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          <p className="text-center"> Newsletter string</p>
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white">
@@ -116,6 +123,16 @@ const CompaniesTable = () => {
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                             {`${new Date(company.createdAt).toUTCString()}`}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <div className="flex justify-center">
+                              <p>
+                                {company.company}{" "}
+                                <a href={company.links[0]}>levantó</a>{" "}
+                                {company.amount}{" "}
+                                <CopyButton company={company} />
+                              </p>
+                            </div>
                           </td>
                         </tr>
                       ))}
