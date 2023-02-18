@@ -1,14 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { CgSpinner } from "react-icons/cg";
 import HTMLReactParser from "html-react-parser";
 import Filter from "./Filter";
 import CopyButton from "./copyButton";
+// import useStateRef from "./useStateRef";
+import { MdDragIndicator } from "react-icons/md";
+import tableDragger from "table-dragger";
 
 const CompaniesTable = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
+
+  const tableRef = useRef();
+  useEffect(() => {
+    const tableEl = tableRef.current;
+    if (!tableEl) {
+      console.log("tableRef.current", tableRef.current);
+      return;
+    }
+    tableDragger(tableEl);
+  }, [isLoading]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,44 +66,65 @@ const CompaniesTable = () => {
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-300">
+                  <table
+                    className="min-w-full divide-y divide-gray-300 table-auto"
+                    ref={tableRef}
+                  >
                     <thead className="bg-gray-50">
                       <tr>
                         <th
                           scope="col"
-                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 w-1/12"
                         >
-                          <p className="text-center">Company</p>
+                          <div className="flex items-center justify-center">
+                            <MdDragIndicator className="inline-block mr-1 text-gray-700 " />
+                            <p className="text-center">Company</p>
+                          </div>
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-1/12"
                         >
-                          <p className="text-center"> $$$ Amount</p>
+                          <div className="flex items-center justify-center">
+                            <MdDragIndicator className="inline-block mr-1 text-gray-700 " />
+                            <p className="text-center"> $$$ Amount</p>
+                          </div>
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-4/12"
                         >
-                          <p className="text-center"> Information links</p>
+                          <div className="flex items-center justify-center">
+                            <MdDragIndicator className="inline-block mr-1 text-gray-700 " />
+                            <p className="text-center"> Information links</p>
+                          </div>
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-4/12"
                         >
-                          <p className="text-center"> Content</p>
+                          <div className="flex items-center justify-center">
+                            <MdDragIndicator className="inline-block mr-1 text-gray-700 " />
+                            <p className="text-center"> Content</p>
+                          </div>
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-1/12"
                         >
-                          <p className="text-center"> Updated on</p>
+                          <div className="flex items-center text-center justify-center">
+                            <MdDragIndicator className="inline-block mr-1 text-gray-700 " />
+                            <p className="text-center"> Updated on</p>
+                          </div>
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-1/12"
                         >
-                          <p className="text-center"> Newsletter string</p>
+                          <div className="flex items-center justify-center">
+                            <MdDragIndicator className="inline-block mr-1 text-gray-700 " />
+                            <p className="text-center"> Newsletter string</p>
+                          </div>
                         </th>
                       </tr>
                     </thead>
@@ -106,7 +140,7 @@ const CompaniesTable = () => {
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                             {company.amount}
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-normal px-3 py-4 text-sm text-gray-500 text-left">
                             {company.links.length > 0
                               ? company.links.map((link, i) => (
                                   <>
@@ -116,7 +150,7 @@ const CompaniesTable = () => {
                                 ))
                               : "not available at time of update, check www.descubre.vc or wait for next update"}
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="px-3 py-4 text-sm text-gray-500 text-left whitespace-normal">
                             {company.content
                               ? HTMLReactParser(company.content)
                               : "not available at time of update, check www.descubre.vc or wait for next update"}
